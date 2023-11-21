@@ -17,18 +17,19 @@ mp_facedetector = mp.solutions.face_detection
 mp_draw = mp.solutions.drawing_utils
 
 # Open both cameras
-cap_right = cv2.VideoCapture(2, cv2.CAP_DSHOW)                    
-cap_left =  cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap_right = cv2.VideoCapture(2)                    
+cap_left =  cv2.VideoCapture(0)
+cap_right.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cap_right.set(cv2.CAP_PROP_FRAME_HEIGHT, 640)
+cap_left.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cap_left.set(cv2.CAP_PROP_FRAME_HEIGHT, 640)
 
 
 # Stereo vision setup parameters
-frame_rate = 120    #Camera frame rate (maximum at 120 fps)
-B = 9               #Distance between the cameras [cm]
-f = 8              #Camera lense's focal length [mm]
-alpha = 56.6        #Camera field of view in the horisontal plane [degrees]
-
-
-
+frame_rate = 30    #Camera frame rate (maximum at 120 fps)
+B = 15               #Distance between the cameras [cm]
+f = 3.67              #Camera lense's focal length [mm]
+alpha = 70.42        #Camera field of view in the horizontal plane [degrees]
 
 # Main program loop with face detector and depth estimation using stereo vision
 with mp_facedetector.FaceDetection(min_detection_confidence=0.7) as face_detection:
@@ -100,8 +101,6 @@ with mp_facedetector.FaceDetection(min_detection_confidence=0.7) as face_detecti
                     cv2.putText(frame_left, f'{int(detection.score[0]*100)}%', (boundBox[0], boundBox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 2)
 
 
-
-
             # If no ball can be caught in one camera show text "TRACKING LOST"
             if not results_right.detections or not results_left.detections:
                 cv2.putText(frame_right, "TRACKING LOST", (75,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255),2)
@@ -116,7 +115,6 @@ with mp_facedetector.FaceDetection(min_detection_confidence=0.7) as face_detecti
                 cv2.putText(frame_left, "Distance: " + str(round(depth,1)), (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,255,0),3)
                 # Multiply computer value with 205.8 to get real-life depth in [cm]. The factor was found manually.
                 print("Depth: ", str(round(depth,1)))
-
 
 
             end = time.time()

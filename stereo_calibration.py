@@ -6,8 +6,8 @@ import glob
 
 ################ FIND CHESSBOARD CORNERS - OBJECT POINTS AND IMAGE POINTS #############################
 
-chessboardSize = (9,6)
-frameSize = (640,480)
+chessboardSize = (10,7) # (width, height)
+frameSize = (640, 640) # edit this later
 
 
 
@@ -33,12 +33,12 @@ for imgLeft, imgRight in zip(imagesLeft, imagesRight):
 
     imgL = cv.imread(imgLeft)
     imgR = cv.imread(imgRight)
-    grayL = cv.cvtColor(imgL, cv.COLOR_BGR2GRAY)
-    grayR = cv.cvtColor(imgR, cv.COLOR_BGR2GRAY)
+    grayL = cv.cvtColor(imgL, cv.COLOR_BGR2GRAY) # Converting to GrayScale
+    grayR = cv.cvtColor(imgR, cv.COLOR_BGR2GRAY) # Converting to GrayScale
 
     # Find the chess board corners
-    retL, cornersL = cv.findChessboardCorners(grayL, chessboardSize, None)
-    retR, cornersR = cv.findChessboardCorners(grayR, chessboardSize, None)
+    retL, cornersL = cv.findChessboardCorners(grayL, chessboardSize, None) # built in function to find the chessboard corners
+    retR, cornersR = cv.findChessboardCorners(grayR, chessboardSize, None) # built in function to find the chessboard corners
 
     # If found, add object points, image points (after refining them)
     if retL and retR == True:
