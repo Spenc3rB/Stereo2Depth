@@ -8,10 +8,10 @@ import cv2
 cv_file = cv2.FileStorage()
 cv_file.open('stereoMap.xml', cv2.FileStorage_READ)
 
-stereoMapL_x = cv_file.getNode('stereoMapL_x').mat()
-stereoMapL_y = cv_file.getNode('stereoMapL_y').mat()
-stereoMapR_x = cv_file.getNode('stereoMapR_x').mat()
-stereoMapR_y = cv_file.getNode('stereoMapR_y').mat()
+stereoMapL_x = cv_file.getNode('stereoMap0_x').mat()
+stereoMapL_y = cv_file.getNode('stereoMap0_y').mat()
+stereoMapR_x = cv_file.getNode('stereoMap0_x').mat()
+stereoMapR_y = cv_file.getNode('stereoMap0_y').mat()
 
 
 def undistortRectify(frameR, frameL):
