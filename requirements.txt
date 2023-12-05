@@ -1,4 +1,6 @@
 opencv-python
+numpy
 scipy
 pyYAML
-ultralytics
+matplotlib
+tflite-runtime

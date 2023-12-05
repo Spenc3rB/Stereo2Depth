@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import time
 from matplotlib import pyplot as plt
+import tflite_runtime.interpreter as tflite
 
 # Function for stereo vision and depth estimation
 import triangulation as tri
@@ -10,9 +11,6 @@ import calibration
 
 # time for fps
 import time
-
-# import YOLO
-from ultralytics import YOLO
 
 # Open both cameras
 cap_right = cv2.VideoCapture(2)                    
@@ -31,8 +29,9 @@ f = 3.67              #Camera lense's focal length [mm]
 alpha = 70.42        #Camera field of view in the horizontal plane [degrees]
 
 # YOLO setup parameters
-MODEL = input("Enter model name: ")
-model = YOLO(f"models/{MODEL}.pt") # results need stream=True
+MODEL = 'best_integer_quant_edgetpu.tflite'
+interpreter = tflite.Interpreter(model_path=MODEL, experimental_delegates=[tflite.load_delegate('libedgetpu.so.1')])
+interpreter.allocate_tensors()
 
 # Main program loop with face detector and depth estimation using stereo vision
 while(cap_right.isOpened() and cap_left.isOpened()):
@@ -49,31 +48,11 @@ while(cap_right.isOpened() and cap_left.isOpened()):
     if succes_left and succes_right:                    
 
         # run YOLOv8 inference on both frames
-        results = model(frame_right, imgsz=320)
+        input_details = interpreter.get_input_details()
+        output_details = interpreter.get_output_details()
+        interpreter.set_tensor(input_details[0]['index'], frame_right)
+        interpreter.invoke()
+        results = interpreter.get_tensor(output_details[0]['index'])
 
-        # get bounding boxes
-        boxes = results.xyxy[0].numpy()
-
-        # get center of bounding boxes
-        centers = []
-        for box in boxes:
-            center = (int((box[0] + box[2]) / 2), int((box[1] + box[3]) / 2))
-            centers.append(center)
-
-        # get depth of bounding boxes
-        depths = []
-        for center in centers:
-            depth = tri.find_depth(center[0], center[1], frame_right, frame_left, B, f, alpha)
-            depths.append(depth)
-        
-        # draw bounding boxes with depth on frame
-        for i in range(len(boxes)):
-            box = boxes[i]
-            depth = depths[i]
-            cv2.rectangle(frame_right, (int(box[0]), int(box[1])), (int(box[2]), int(box[3])), (0, 0, 255), 2)
-            cv2.putText(frame_right, f"{depth} cm", (int(box[0]), int(box[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-
-        # show frame
-        cv2.imshow("frame", frame_right)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        # print the output shape
+        print(results.shape)
