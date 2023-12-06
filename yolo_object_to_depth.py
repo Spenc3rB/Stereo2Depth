@@ -56,5 +56,5 @@ while(cap_right.isOpened() and cap_left.isOpened()):
         output_details = interpreter.get_output_details()
         
         # print the details of the input and output tensors
-        print(input_details.shape)
-        print(output_details.shape)
+        print(input_details)
+        print(output_details)
