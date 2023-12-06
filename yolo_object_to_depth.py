@@ -42,14 +42,15 @@ while(cap_right.isOpened() and cap_left.isOpened()):
     ################## CALIBRATION #########################################################
     frame_right, frame_left = calibration.undistortRectify(frame_right, frame_left)
 
+    
+    # Resize the frames to match the input size expected by the model
+    frame_right = cv2.resize(frame_right, (320, 320))
+    frame_left = cv2.resize(frame_left, (320, 320))
     ########################################################################################
 
     # Convert the frame_right to float32 and normalize the values
-    # Resize frame_right to match the input shape expected by the model
-    frame_right_resized = cv2.resize(frame_right, (320, 320))
-    frame_right_resized = frame_right_resized.astype('float32')
-    frame_right_resized /= 255.0
-    frame_right_resized = np.expand_dims(frame_right_resized, axis=0)
+    frame_right = frame_right.astype(np.float32)
+    frame_right = frame_right / 255.0
 
     # If cannot catch any frame, break
     if succes_left and succes_right:                    
