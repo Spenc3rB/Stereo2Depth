@@ -46,6 +46,7 @@ while(cap_right.isOpened() and cap_left.isOpened()):
 
     # Convert the frame_right to float32 and normalize the values
     frame_right = np.float32(frame_right)/255.0
+    frame_right = np.expand_dims(frame_right, axis=0)
 
     # If cannot catch any frame, break
     if succes_left and succes_right:                    
