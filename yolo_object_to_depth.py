@@ -54,9 +54,7 @@ while(cap_right.isOpened() and cap_left.isOpened()):
         # run YOLOv8 inference on both frames
         input_details = interpreter.get_input_details()
         output_details = interpreter.get_output_details()
-        interpreter.set_tensor(input_details[0]['index'], frame_right)
-        interpreter.invoke()
-        results = interpreter.get_tensor(output_details[0]['index'])
-
-        # print the output shape
-        print(results.shape)
+        
+        # print the details of the input and output tensors
+        print(input_details.shape)
+        print(output_details.shape)
