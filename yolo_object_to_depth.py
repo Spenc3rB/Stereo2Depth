@@ -64,7 +64,10 @@ while(cap_right.isOpened() and cap_left.isOpened()):
         # [{'name': 'PartitionedCall:0', 'index': 45, 'shape': array([   1,   12, 2100], dtype=int32), 'shape_signature': array([   1,   12, 2100], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
         # [{'name': 'serving_default_images:0', 'index': 0, 'shape': array([  1, 320, 320,   3], dtype=int32), 'shape_signature': array([  1, 320, 320,   3], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
         # print the details of the input and output tensors
+        print("Input and output tensor shapes: ")
         print(input_details[0]['shape'])
         print(frame_right.shape)
         print(output_details[0]['shape'])
+        # print the output tensor data type
+        # [   1   12 2100] --> Model has 12 classes for each of the 2100 grid cells in the image
         break
